@@ -13,6 +13,7 @@
    - Injects Prev/Next post links and Suggested posts
    - Preserves file timestamps so baking doesn't change dates
    - Ensures {{AUTHOR}} from config.json and cleans “will be injected” comments
+   - Extensionless URLs: canonical + layout links; auto stubs for /path/ -> /path.html
    - PowerShell 5.1-safe
    ============================================ #>
 
@@ -44,7 +45,7 @@ function Get-MetaDescriptionFromHtml([string]$html){
   return $null
 }
 function HtmlStrip([string]$s){
-  if([string]::IsNullOrWhiteSpace($s)){return ""}
+  if([string]::IsNullOrWhiteSpace($s)){return "" }
   $s = [regex]::Replace($s,'(?is)<script[^>]*>.*?</script>','')
   $s = [regex]::Replace($s,'(?is)<style[^>]*>.*?</style>','')
   $s = [regex]::Replace($s,'(?s)<[^>]+>',' ')
@@ -190,24 +191,23 @@ function Get-ASDDescription([string]$raw,[string]$content){
   return $d
 }
 
-# ------ Canonical helpers ------
+# ------ Canonical helpers (extensionless) ------
+function To-Extensionless([string]$rel){
+  if([string]::IsNullOrWhiteSpace($rel)){ return $rel }
+  $rel = $rel.Replace('\','/')
+  if($rel -ieq 'index.html'){ return '/' }
+  $m = [regex]::Match($rel,'^(.+)/index\.html$')
+  if($m.Success){ return '/' + $m.Groups[1].Value.Trim('/') + '/' }
+  if($rel -match '\.html$'){ return '/' + ($rel -replace '\.html$','').Trim('/') + '/' }
+  return '/' + $rel.Trim('/') + '/'
+}
 function Build-Canonical([string]$base,[string]$relPath){
   if([string]::IsNullOrWhiteSpace($relPath)){ return $base }
-  $rel = $relPath.Replace('\','/')
-  if($rel -ieq 'index.html'){ return Collapse-DoubleSlashesPreserveSchemeLocal($base) }
-  $m = [regex]::Match($rel,'^(.+)/index\.html$')
-  if($m.Success){
-    if($base -match '^[a-z]+://'){
-      return (New-Object Uri((New-Object Uri($base)), ($m.Groups[1].Value.Trim('/') + '/'))).AbsoluteUri
-    } else {
-      return Collapse-DoubleSlashesPreserveSchemeLocal($base.TrimEnd('/') + '/' + $m.Groups[1].Value.Trim('/') + '/')
-    }
+  $extless = To-Extensionless $relPath
+  if($base -match '^[a-z]+://'){
+    return (New-Object Uri((New-Object Uri($base)), $extless.TrimStart('/'))).AbsoluteUri
   } else {
-    if($base -match '^[a-z]+://'){
-      return (New-Object Uri((New-Object Uri($base)), $rel)).AbsoluteUri
-    } else {
-      return Collapse-DoubleSlashesPreserveSchemeLocal($base.TrimEnd('/') + '/' + $rel)
-    }
+    return Collapse-DoubleSlashesPreserveSchemeLocal($base.TrimEnd('/') + $extless)
   }
 }
 function Ensure-CanonicalTag([string]$html,[string]$href){
@@ -238,7 +238,7 @@ function Ensure-OgImageAbsolute([string]$html,[string]$base,[string]$root){
 
 # ------ “bake helper” cleanups ------
 function Remove-InjectorComments([string]$html){
-  if([string]::IsNullOrWhiteSpace($html)){ return $html }
+  if([string]::IsNullOrWhiteSpace($html)){return $html}
   $html = [regex]::Replace($html,'(?im)^\s*<!--\s*Canonical will be injected by bake\.ps1\s*-->\s*\r?\n?','')
   $html = [regex]::Replace($html,'(?im)^\s*<!--\s*Robots will be injected by bake\.ps1\s*-->\s*\r?\n?','')
   $html = [regex]::Replace($html,'(?im)^\s*<!--\s*Feeds will be added by bake\.ps1 if missing\s*-->\s*\r?\n?','')
@@ -246,9 +246,11 @@ function Remove-InjectorComments([string]$html){
   return $html
 }
 function Normalize-DashesToPipe([string]$html){
-  if([string]::IsNullOrWhiteSpace($html)){ return $html }
+  if([string]::IsNullOrWhiteSpace($html)){return $html}
   return ($html -replace '—','|' -replace '–','|' -replace ' - ',' | ')
 }
+
+# ------ Titles ------
 function SlugToPretty([string]$name){
   if([string]::IsNullOrWhiteSpace($name)){ return "" }
   $base = [IO.Path]::GetFileNameWithoutExtension($name)
@@ -260,6 +262,66 @@ function Normalize-PageTitle([string]$maybe,[string]$fileBase){
   if([string]::IsNullOrWhiteSpace($maybe)){ return (SlugToPretty $fileBase) }
   if($maybe -match '^\s*-\s*Title\s*$'){ return (SlugToPretty $fileBase) }
   return $maybe
+}
+
+# --- PRETTY: rewrite layout links to extensionless (index + leaf) ---
+function Pretty-Links([string]$html){
+  if([string]::IsNullOrWhiteSpace($html)){ return $html }
+
+  # Drop index.html -> trailing slash
+  $html = [regex]::Replace($html,'(?i)href\s*=\s*"\{\{PREFIX\}\}index\.html"','href="{{PREFIX}}"')
+  $html = [regex]::Replace($html,'(?i)href\s*=\s*"((?:\{\{PREFIX\}\}|/)[^"]*?/+)index\.html(\?[^"#]*)?(#[^"]*)?"','href="$1$2$3"')
+
+  # Leaf *.html -> extensionless (avoid assets & known xml/txt)
+  $html = [regex]::Replace($html,'(?i)href\s*=\s*"(?!https?://|mailto:|tel:|#)(?![^"]*(?:assets/|feed\.xml|atom\.xml|sitemap\.xml|robots\.txt))((?:\{\{PREFIX\}\}|/)[^"]*?)\.html(\?[^"#]*)?(#[^"]*)?"','href="$1/$2$3"')
+
+  # Also fix any canonical content=".../index.html" -> ".../"
+  $html = [regex]::Replace($html,'(?i)content\s*=\s*"((?:\{\{PREFIX\}\}|/)[^"]*?/+)index\.html(\?[^"#]*)?(#[^"]*)?"','content="$1$2$3"')
+
+  return $html
+}
+
+# --- AUTO pretty redirects: ensure /path/ -> /path.html in redirects.json ---
+function Ensure-PrettyRedirects([string]$root,[string]$redirectsJson){
+  $items=@()
+  if(Test-Path $redirectsJson){
+    try{ $raw=Get-Content $redirectsJson -Raw; if(-not [string]::IsNullOrWhiteSpace($raw)){$items=$raw|ConvertFrom-Json} } catch { $items=@() }
+  }
+  if($null -eq $items){ $items=@() }
+
+  # Build set of existing "from" for quick lookups
+  $fromSet=@{}
+  foreach($r in $items){ if($null -ne $r -and $r.PSObject.Properties.Name -contains 'from'){ $fromSet[[string]$r.from]=1 } }
+
+  $newCount=0
+  $htmls = Get-ChildItem -Path $root -Recurse -File -Include *.html | Where-Object {
+    $_.Name -ne 'layout.html' -and $_.Name -ne '404.html' -and
+    $_.FullName -notmatch '\\assets\\' -and $_.FullName -notmatch '\\partials\\'
+  }
+  foreach($f in $htmls){
+    $raw = Get-Content $f.FullName -Raw
+    if($raw -match '(?is)<!--\s*ASD:REDIRECT\b'){ continue }
+    $rel = $f.FullName.Substring($root.Length+1) -replace '\\','/'
+    if($rel -ieq 'index.html'){ continue }
+    if([regex]::IsMatch($rel,'^.+/index\.html$')){ continue }
+
+    if($rel -notmatch '\.html$'){ continue }
+    $extless = '/' + ($rel -replace '\.html$','').Trim('/') + '/'
+    $to = '/' + $rel.Trim('/')
+
+    if(-not $fromSet.ContainsKey($extless)){
+      $items += [pscustomobject]@{ from=$extless; to=$to; code=301; enabled=$true }
+      $fromSet[$extless]=1
+      $newCount++
+    }
+  }
+
+  if($newCount -gt 0){
+    # Save array back
+    $json = $items | ConvertTo-Json -Depth 6
+    Set-Content -Encoding UTF8 $redirectsJson $json
+    Write-Host "[ASD] Added $newCount pretty redirects to redirects.json"
+  }
 }
 
 # ------ Feed builders (RSS + Atom) ------
@@ -276,8 +338,10 @@ function Build-PostList($BlogDir,$Base){
     $title=Normalize-DashesToPipe $title
     $metaDate=Get-MetaDateFromHtml $html
     if($metaDate){$dateDt=TryParse-Date $metaDate; $dateText=$metaDate}else{$dateDt=$f.CreationTime; $dateText=$f.CreationTime.ToString('yyyy-MM-dd')}
-    if($Base -match '^[a-z]+://'){ $abs=(New-Object Uri((New-Object Uri($Base)),('blog/'+$f.Name))).AbsoluteUri } else { $abs=($Base.TrimEnd('/') + '/blog/' + $f.Name) }
-    [void]$list.Add([pscustomobject]@{ Name=$f.Name; Title=$title; Date=$dateDt; DateText=$dateText; Link=(Collapse-DoubleSlashesPreserveSchemeLocal $abs) })
+    $rel = 'blog/' + $f.Name
+    $extless = To-Extensionless $rel
+    if($Base -match '^[a-z]+://'){ $abs=(New-Object Uri((New-Object Uri($Base)), $extless.TrimStart('/'))).AbsoluteUri } else { $abs=($Base.TrimEnd('/') + $extless) }
+    [void]$list.Add([pscustomobject]@{ Name=$f.Name; Title=$title; Date=$dateDt; DateText=$dateText; Link=(Collapse-DoubleSlashesPreserveSchemeLocal $abs); Extless=$extless })
   }
   ($list | Sort-Object Date -Descending)
 }
@@ -353,7 +417,9 @@ function Build-SearchIndex($BlogDir,$RootDir){
     }
     $desc = [regex]::Replace($desc,'\s+',' ').Trim()
     if($desc.Length -gt 240){ $desc = $desc.Substring(0,240) + '…' }
-    $rows += [pscustomobject]@{ title = $title; url = ('blog/' + $f.Name); date = $date; desc = $desc }
+    $url = 'blog/' + $f.Name
+    $url = (To-Extensionless $url).TrimStart('/')
+    $rows += [pscustomobject]@{ title = $title; url = $url; date = $date; desc = $desc }
   }
   $assetsDir = Join-Path $RootDir 'assets'
   if(-not (Test-Path $assetsDir)){ New-Item -ItemType Directory -Force -Path $assetsDir | Out-Null }
@@ -375,7 +441,6 @@ function Build-PrevNextMap($posts){
   }
   return $map
 }
-# Stopwords
 $script:ASD_Stop = @{}; foreach($w in @('the','a','an','and','or','for','with','from','to','of','in','on','how','what','is','are','vs','using','use','your','you','this','that','guide','worth','price','ace','ultra','premium')){$script:ASD_Stop[$w]=$true}
 function Get-TitleTokens([string]$t){
   if([string]::IsNullOrWhiteSpace($t)){ return @() }
@@ -415,8 +480,8 @@ function Inject-PostNav([string]$content, $prev, $next){
   if([string]::IsNullOrWhiteSpace($content)){ return $content }
   if([regex]::IsMatch($content,'(?is)<div\s+class\s*=\s*["'']post-nav["'']')){ return $content }
   $prevHtml = '<span></span>'; $nextHtml = '<span></span>'
-  if($prev -ne $null){ $prevHtml = '<a class="prev" href="/blog/' + $prev.Name + '"><span>← ' + (HtmlEscape $prev.Title) + '</span></a>' }
-  if($next -ne $null){ $nextHtml = '<a class="next" href="/blog/' + $next.Name + '"><span>' + (HtmlEscape $next.Title) + ' →</span></a>' }
+  if($prev -ne $null){ $prevHtml = '<a class="prev" href="/blog/' + ($prev.Name -replace '\.html$','/') + '"><span>← ' + (HtmlEscape $prev.Title) + '</span></a>' }
+  if($next -ne $null){ $nextHtml = '<a class="next" href="/blog/' + ($next.Name -replace '\.html$','/') + '"><span>' + (HtmlEscape $next.Title) + ' →</span></a>' }
   $nav = '<div class="post-nav">' + $prevHtml + '<span></span>' + $nextHtml + '</div>'
   $m=[regex]::Match($content,'(?is)</article>')
   if($m.Success){ $idx=$m.Index; return $content.Substring(0,$idx) + $nav + $content.Substring($idx) } else { return $content + $nav }
@@ -426,7 +491,7 @@ function Inject-RelatedSection([string]$content, $items){
   if([regex]::IsMatch($content,'(?is)<div\s+class\s*=\s*["'']related["'']')){ return $content }
   if($null -eq $items -or $items.Count -lt 1){ return $content }
   $lis = New-Object System.Collections.Generic.List[string]
-  foreach($it in $items){ $lis.Add('<li><a href="/blog/' + $it.Name + '">' + (HtmlEscape $it.Title) + '</a><small> | ' + $it.DateText + '</small></li>') | Out-Null }
+  foreach($it in $items){ $lis.Add('<li><a href="/blog/' + ($it.Name -replace '\.html$','/') + '">' + (HtmlEscape $it.Title) + '</a><small> | ' + $it.DateText + '</small></li>') | Out-Null }
   $html = '<div class="related"><h2>Suggested posts</h2><ul class="posts">' + ([string]::Join('', $lis)) + '</ul></div>'
   $m=[regex]::Match($content,'(?is)</article>')
   if($m.Success){ $idx=$m.Index; return $content.Substring(0,$idx) + $html + $content.Substring($idx) } else { return $content + $html }
@@ -450,7 +515,8 @@ $Year=(Get-Date).Year
 
 Write-Host "[ASD] Baking... brand='$Brand' store='$Money' base='$Base'"
 
-# Redirect stubs
+# --- Ensure extensionless redirects exist, then generate stubs ---
+Ensure-PrettyRedirects -root $RootDir -redirectsJson $paths.Redirects
 $made=Generate-RedirectStubs -redirectsJson $paths.Redirects -root $RootDir -base $Base
 if($made -gt 0){Write-Host "[ASD] Redirect stubs generated: $made"}
 
@@ -476,7 +542,8 @@ if(Test-Path $BlogIndex){
     $title=Normalize-DashesToPipe $title
     $metaDate=Get-MetaDateFromHtml $html
     if($metaDate){$dateDisplay=$metaDate; $sortKey=TryParse-Date $metaDate}else{$dateDisplay=$f.CreationTime.ToString('yyyy-MM-dd'); $sortKey=$f.CreationTime}
-    [void]$entries.Add([pscustomobject]@{ Title=$title; Href=$f.Name; DateText=$dateDisplay; SortKey=$sortKey })
+    $href=($f.Name -replace '\.html$','/')  # extensionless
+    [void]$entries.Add([pscustomobject]@{ Title=$title; Href=$href; DateText=$dateDisplay; SortKey=$sortKey })
   }
   $posts=New-Object System.Collections.Generic.List[string]
   foreach($e in ($entries | Sort-Object SortKey -Descending)){
@@ -523,7 +590,6 @@ Get-ChildItem -Path $RootDir -Recurse -File | Where-Object { $_.Extension -eq ".
     $inner = ($tm.Groups[1].Value -replace '\s+',' ').Trim()
     $pageTitle = Normalize-PageTitle $inner $_.BaseName
     if($inner -match '^\s*-\s*Title\s*$'){
-      # also fix the h1 in content so it doesn't keep leaking
       $fixed = HtmlEscape (SlugToPretty $_.BaseName)
       $content = [regex]::Replace($content,'(?is)(<h1[^>]*>)(.*?)(</h1>)',{ param($m) $m.Groups[1].Value + $fixed + $m.Groups[3].Value },1)
     }
@@ -566,6 +632,8 @@ Get-ChildItem -Path $RootDir -Recurse -File | Where-Object { $_.Extension -eq ".
     $final = Ensure-CanonicalTag -html $final -href $canonical
     # Rewrite root-absolute links to prefix-relative
     $final = Rewrite-RootLinks $final $prefix
+    # Pretty links (index + leaf) in the layout markup
+    $final = Pretty-Links $final
   }
 
   # OG image (absolute); runs after rewrites/canonical
@@ -589,11 +657,9 @@ Get-ChildItem -Path $RootDir -Recurse -File -Include *.html |
     $raw=Get-Content $_.FullName -Raw
     if($raw -match '(?is)<!--\s*ASD:REDIRECT\b'){return}
     $rel=$_.FullName.Substring($RootDir.Length+1) -replace '\\','/'
-    $loc=$null
-    if($rel -ieq 'index.html'){$loc=$Base}else{
-      $m=[regex]::Match($rel,'^(.+)/index\.html$')
-      if($m.Success){$loc=($Base.TrimEnd('/')+'/'+$m.Groups[1].Value+'/')}else{$loc=($Base.TrimEnd('/')+'/'+$rel)}
-    }
+    $loc = $null
+    $extless = To-Extensionless $rel
+    if($Base -match '^[a-z]+://'){ $loc=(New-Object Uri((New-Object Uri($Base)), $extless.TrimStart('/'))).AbsoluteUri } else { $loc=($Base.TrimEnd('/') + $extless) }
     $loc=Collapse-DoubleSlashesPreserveSchemeLocal $loc
     $last=(Get-Item $_.FullName).LastWriteTime.ToString('yyyy-MM-dd')
     $urls.Add([pscustomobject]@{loc=$loc;lastmod=$last})|Out-Null

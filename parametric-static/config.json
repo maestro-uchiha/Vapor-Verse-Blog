@@ -2,6 +2,6 @@
   "SiteName": "Vapor Verse Blog",
   "StoreUrl": "https://example.com/",
   "Description": "Vapor Verse Blog, your ultimate source for vape disposable updates.",
-  "BaseUrl": "https://maestro-uchiha.github.io/vapor-verse-blog/",
+  "BaseUrl": "https://vapor-verse-blog.netlify.app/",
   "author": { "name": "Maestro" }
 }

@@ -1,7 +1,7 @@
 ﻿{
-  "SiteName": "My ASD Site",
+  "SiteName": "Vapor Verse Blog",
   "StoreUrl": "https://example.com/",
-  "Description": "Clean static sites with ASD.",
-  "BaseUrl": "https://maestro-uchiha.github.io/my-new-asd-site/",
+  "Description": "Vapor Verse Blog, your ultimate source for vape disposable updates.",
+  "BaseUrl": "https://maestro-uchiha.github.io/vapor-verse-blog/",
   "author": { "name": "Maestro" }
 }

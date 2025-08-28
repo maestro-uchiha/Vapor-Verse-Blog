@@ -44,7 +44,7 @@ function Get-MetaDescriptionFromHtml([string]$html){
   return $null
 }
 function HtmlStrip([string]$s){
-  if([string]::IsNullOrWhiteSpace($s)){return ""}
+  if([string]::IsNullOrWhiteSpace($s)){return "" }
   $s = [regex]::Replace($s,'(?is)<script[^>]*>.*?</script>','')
   $s = [regex]::Replace($s,'(?is)<style[^>]*>.*?</style>','')
   $s = [regex]::Replace($s,'(?s)<[^>]+>',' ')
@@ -73,9 +73,17 @@ function Resolve-RedirectTarget([string]$to,[string]$base){
 }
 function Make-RedirectOutputPath([string]$from,[string]$root){
   if([string]::IsNullOrWhiteSpace($from)){return $null}
-  $rel=$from.Trim(); if($rel.StartsWith('/')){$rel=$rel.TrimStart('/')}
-  if(-not ($rel -match '\.html?$')){ if($rel.EndsWith('/')){$rel+='index.html'} else {$rel+='/index.html'} }
-  $out=Join-Path $root $rel; $dir=Split-Path $out -Parent; New-Item -ItemType Directory -Force -Path $dir | Out-Null; $out
+  $rel=$from.Trim()
+  if($rel.StartsWith('/')){$rel=$rel.TrimStart('/')}
+  # FIX: if someone wrote "something.html/" in redirects.json, drop the trailing slash
+  if($rel -match '\.html?/$'){ $rel = $rel.TrimEnd('/') }
+  if(-not ($rel -match '\.html?$')){
+    if($rel.EndsWith('/')){ $rel+='index.html' } else { $rel+='/index.html' }
+  }
+  $out=Join-Path $root $rel
+  $dir=Split-Path $out -Parent
+  New-Item -ItemType Directory -Force -Path $dir | Out-Null
+  $out
 }
 function HtmlEscape([string]$s){ if($null -eq $s){return ''}; $s.Replace('&','&amp;').Replace('<','&lt;').Replace('>','&gt;').Replace('"','&quot;') }
 function JsString([string]$s){ if($null -eq $s){return ''}; $s.Replace('\','\\').Replace("'", "\'") }
@@ -262,6 +270,27 @@ function Normalize-PageTitle([string]$maybe,[string]$fileBase){
   return $maybe
 }
 
+# === Minimal internal .html stripper (href only) ===
+function Strip-InternalHtmlExtensions([string]$html,[string]$base){
+  if([string]::IsNullOrWhiteSpace($html)){ return $html }
+
+  # A) index.html -> /
+  #    - exact "index.html" (relative)
+  $html = [regex]::Replace($html,'(?i)href\s*=\s*"index\.html(\?[^"#]*)?(#[^"]*)?"','href="./$1$2"')
+  #    - root/dir index
+  $html = [regex]::Replace($html,'(?i)href\s*=\s*"(/(?:[^"#?]*/)?)(?:index\.html)(\?[^"#]*)?(#[^"]*)?"','href="$1$2$3"')
+  #    - relative dir index
+  $html = [regex]::Replace($html,'(?i)href\s*=\s*"(?!https?://|mailto:|tel:|#)((?:[^"/#?]+/)+)index\.html(\?[^"#]*)?(#[^"]*)?"','href="$1$2$3"')
+
+  # B) foo.html -> foo/
+  #    - root-absolute internal
+  $html = [regex]::Replace($html,'(?i)href\s*=\s*"(/[^"#?]+)\.html(\?[^"#]*)?(#[^"]*)?"','href="$1/$2$3"')
+  #    - relative internal (not http(s), mailto, tel, #)
+  $html = [regex]::Replace($html,'(?i)href\s*=\s*"(?!https?://|mailto:|tel:|#)([^"#?]+)\.html(\?[^"#]*)?(#[^"]*)?"','href="$1/$2$3"')
+
+  return $html
+}
+
 # ------ Feed builders (RSS + Atom) ------
 function Build-PostList($BlogDir,$Base){
   $list=New-Object System.Collections.ArrayList
@@ -421,16 +450,6 @@ function Inject-PostNav([string]$content, $prev, $next){
   $m=[regex]::Match($content,'(?is)</article>')
   if($m.Success){ $idx=$m.Index; return $content.Substring(0,$idx) + $nav + $content.Substring($idx) } else { return $content + $nav }
 }
-function Inject-RelatedSection([string]$content, $items){
-  if([string]::IsNullOrWhiteSpace($content)){ return $content }
-  if([regex]::IsMatch($content,'(?is)<div\s+class\s*=\s*["'']related["'']')){ return $content }
-  if($null -eq $items -or $items.Count -lt 1){ return $content }
-  $lis = New-Object System.Collections.Generic.List[string]
-  foreach($it in $items){ $lis.Add('<li><a href="/blog/' + $it.Name + '">' + (HtmlEscape $it.Title) + '</a><small> | ' + $it.DateText + '</small></li>') | Out-Null }
-  $html = '<div class="related"><h2>Suggested posts</h2><ul class="posts">' + ([string]::Join('', $lis)) + '</ul></div>'
-  $m=[regex]::Match($content,'(?is)</article>')
-  if($m.Success){ $idx=$m.Index; return $content.Substring(0,$idx) + $html + $content.Substring($idx) } else { return $content + $html }
-}
 
 # ---------------- start ----------------
 $paths=Get-ASDPaths; $cfg=Get-ASDConfig
@@ -566,6 +585,8 @@ Get-ChildItem -Path $RootDir -Recurse -File | Where-Object { $_.Extension -eq ".
     $final = Ensure-CanonicalTag -html $final -href $canonical
     # Rewrite root-absolute links to prefix-relative
     $final = Rewrite-RootLinks $final $prefix
+    # Strip ".html" on internal hrefs (your request)
+    $final = Strip-InternalHtmlExtensions -html $final -base $Base
   }
 
   # OG image (absolute); runs after rewrites/canonical

@@ -5,7 +5,7 @@
   --muted: #666666;
   --header: #222222;
   --footer: #222222;
-  --primary: #ffcc00;     /* nav link color */
+  --primary: #ffffff;     /* nav link color */
   --link: #0a66ff;        /* body link color */
   --border: #e5e5e5;
 
@@ -22,7 +22,7 @@
     --muted: #9aa1ab;
     --header: #111217;
     --footer: #111217;
-    --primary: #ffffff;
+    --primary: #ffffff; /* nav menu color */
     --link: #6aa3ff;
     --border: #20232a;
     --chip: #171a20;
@@ -37,7 +37,7 @@ html[data-theme="dark"] {
   --muted: #9aa1ab;
   --header: #111217;
   --footer: #111217;
-  --primary: #ffd42a;
+  --primary: #ffffff; /* nav menu color */
   --link: #6aa3ff;
   --border: #20232a;
   --chip: #171a20;

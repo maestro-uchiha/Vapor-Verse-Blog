@@ -1,36 +1,38 @@
-name: Deploy static site to GitHub Pages
+name: Build static site (no GitHub Pages)
 
 on:
-  workflow_dispatch: {}
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
+# No permission to publish to GitHub Pages
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
+  pages: none
+  id-token: none
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: parametric-static
+      # System.Drawing on Linux needs libgdiplus for your OG-image step in bake.ps1
+      - name: Install native deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgdiplus
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      # Run your PowerShell build + bake (generates feed.xml, atom.xml, sitemap, etc.)
+      - name: Build & Bake
+        shell: pwsh
+        run: ./parametric-static/scripts/build-and-bake.ps1
+
+      # Upload the baked site as an artifact you can download or deploy elsewhere
+      - name: Upload baked site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: parametric-static/**

@@ -22,7 +22,7 @@
     --muted: #9aa1ab;
     --header: #111217;
     --footer: #111217;
-    --primary: #ffd42a;
+    --primary: #ffffff;
     --link: #6aa3ff;
     --border: #20232a;
     --chip: #171a20;
@@ -49,7 +49,7 @@ html[data-theme="light"] {
   --muted: #666666;
   --header: #222222;
   --footer: #222222;
-  --primary: #ffffff;
+  --primary: #ffffff; /* nav menu color */
   --link: #0a66ff;
   --border: #e5e5e5;
   --chip: #f2f2f2;

@@ -8,11 +8,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Homepage | Vapor Verse Blog</title>
+  <title>Vapor Verse Blog | Vapor Verse Blog</title>
   <meta name="description" content="Vapor Verse Blog, your ultimate source for vape disposable updates.">
   <meta name="author" content="Maestro">
 <!-- Open Graph -->
-  <meta property="og:title" content="Homepage | Vapor Verse Blog">
+  <meta property="og:title" content="Vapor Verse Blog | Vapor Verse Blog">
   <meta property="og:description" content="Vapor Verse Blog, your ultimate source for vape disposable updates.">
 <meta property="og:image" content="https://vapor-verse-blog.netlify.app/assets/img/og.jpeg">
   <meta property="og:type" content="website">
@@ -65,55 +65,138 @@
   </header>
 
   <!-- KEEP CONTENT ON ONE LINE TO AVOID WHITESPACE GROWTH -->
-  <main><section class="hero">
-  <h1>Homepage</h1>
-  <p>Premium quality, reliability, and trust | Built into every experience.</p>
-  <p class="link-row">
-    <a class="btn primary" href="about/">Learn more</a>
-    <a class="btn ghost" href="blog/">Read the blog</a>
-    <a class="btn link" href="contact/">Get in touch →</a>
-  </p>
-</section>
+  <main><main class="home">
+  <header class="hero">
+    <h1>Vapor Verse Blog</h1>
+    <p class="tagline">Practical guides, science-backed explainers, and honest takes from across the vapor community.</p>
+    <p class="last-updated">Last updated: 2025-09-05</p>
+    <p class="hero-ctas">
+      <a class="btn btn-primary" href="blog/">Read the blog</a>
+      <a class="btn btn-secondary" href="about.html">About Vapor Verse</a>
+    </p>
+    <form class="site-search" role="search" action="search.html" method="get">
+      <label for="q" class="sr-only">Search Vapor Verse</label>
+      <input id="q" name="q" type="search" placeholder="Search articles, guides, topics…" />
+      <button type="submit">Search</button>
+    </form>
+  </header>
 
-<section class="features">
-  <h2 class="mt-0">Why Ace</h2>
-  <ul>
-    <li><strong>Top-tier materials</strong> | curated for longevity and performance.</li>
-    <li><strong>Honest design</strong> | simple, elegant, and functional.</li>
-    <li><strong>Built to last</strong> | fewer replacements, more value.</li>
-    <li><strong>Human support</strong> | real help when you need it.</li>
-  </ul>
-</section>
+  <nav class="toc" aria-label="Table of contents">
+    <ol>
+      <li><a href="#featured">Featured</a></li>
+      <li><a href="#latest">Latest posts</a></li>
+      <li><a href="#categories">Browse by category</a></li>
+      <li><a href="#guides">Starter guides</a></li>
+      <li><a href="#about">About the blog</a></li>
+      <li><a href="#subscribe">Subscribe</a></li>
+    </ol>
+  </nav>
 
-<section class="highlights">
-  <h2 class="mt-0">Highlights</h2>
-  <p>Explore our latest updates, guides, and notes from the team.</p>
-</section>
+  <section id="featured" class="section">
+    <h2 id="featured">Featured <a class="h-anchor" href="#featured">#</a></h2>
+    <article class="feature">
+      <h3><a href="blog/ultimate-vape-battery-guide/">The Ultimate Battery Safety & Care Guide</a></h3>
+      <p>Understand cells, Ohm’s law basics, charging best practices, and how to avoid common pitfalls. A must-read for anyone using external batteries.</p>
+      <p class="meta"><a href="categories/guides/">Guides</a> · <a href="tags/battery/">#battery</a> · <a href="tags/safety/">#safety</a></p>
+    </article>
+  </section>
 
-<section class="recent">
-  <h2 class="mt-0">Latest from the blog</h2>
-  <!-- The list below is auto-populated by bake.ps1 on each build -->
-  <!-- ASD:RECENT_POSTS_START -->
-<ul class="posts">
-<li><a href="blog/twelveth-post/">Twelveth Post | Ace Ultra Premium</a><small> | 2025-08-25</small></li>
-<li><a href="blog/the-seventh-post/">the-seventh-post | Ace Ultra Premium</a><small> | 2025-08-24</small></li>
-<li><a href="blog/tenth-post/">Tenth Post | Ace Ultra Premium</a><small> | 2025-08-24</small></li>
-<li><a href="blog/the-eight-post-here/">The Eight Post Here | Ace Ultra Premium</a><small> | 2025-08-24</small></li>
-<li><a href="blog/the-sixth-post/">The Sixth Post | Ace Ultra Premium</a><small> | 2025-08-24</small></li>
-</ul>
-<!-- ASD:RECENT_POSTS_END -->
+  <section id="latest" class="section">
+    <h2 id="latest">Latest posts <a class="h-anchor" href="#latest">#</a></h2>
+    <div class="post-grid">
+      <article>
+        <h3><a href="blog/pods-vs-box-mods/">Pod Systems vs. Box Mods: Which Fits Your Style?</a></h3>
+        <p>A pragmatic comparison of form-factor, performance, maintenance, and total cost of ownership.</p>
+        <p class="meta"><a href="categories/reviews/">Reviews</a> · <a href="tags/pods/">#pods</a> · <a href="tags/mods/">#mods</a></p>
+      </article>
+      <article>
+        <h3><a href="blog/e-liquid-flavor-science/">E‑Liquid Flavor Science: How Taste Actually Works</a></h3>
+        <p>We unpack flavor chemistry, PG/VG ratios, and why steeping changes the profile.</p>
+        <p class="meta"><a href="categories/science/">Science</a> · <a href="tags/flavor/">#flavor</a> · <a href="tags/pg-vg/">#pg-vg</a></p>
+      </article>
+      <article>
+        <h3><a href="blog/diy-coils-101/">DIY Coils 101: Tools, Materials, and Safety</a></h3>
+        <p>A beginner-friendly walk-through for building and testing your first coils safely.</p>
+        <p class="meta"><a href="categories/guides/">Guides</a> · <a href="tags/coils/">#coils</a></p>
+      </article>
+      <article>
+        <h3><a href="blog/maintenance-checklist/">Monthly Maintenance Checklist for Clean, Consistent Flavor</a></h3>
+        <p>Simple routines to extend device life and keep performance predictable.</p>
+        <p class="meta"><a href="categories/guides/">Guides</a> · <a href="tags/maintenance/">#maintenance</a></p>
+      </article>
+    </div>
+    <p class="more"><a href="blog/">See all posts →</a></p>
+  </section>
 
-  <p class="mt-2"><a href="blog/">See all posts →</a></p>
-</section>
+  <section id="categories" class="section">
+    <h2 id="categories">Browse by category <a class="h-anchor" href="#categories">#</a></h2>
+    <ul class="category-list">
+      <li><a href="categories/guides/">Guides</a></li>
+      <li><a href="categories/science/">Science</a></li>
+      <li><a href="categories/reviews/">Reviews</a></li>
+      <li><a href="categories/opinion/">Opinion</a></li>
+      <li><a href="categories/news/">News</a></li>
+    </ul>
+  </section>
 
-<section class="cta">
-  <h2 class="mt-0">Ready when you are</h2>
-  <p>Questions, ideas, or partnership requests? We’re listening.</p>
-  <p><a href="contact/">Contact us →</a></p>
-</section>
+  <section id="guides" class="section">
+    <h2 id="guides">Starter guides <a class="h-anchor" href="#guides">#</a></h2>
+    <ol class="guides">
+      <li>
+        <h3><a href="blog/beginners-guide-to-vapor-mods/">Beginner’s Guide to Vapor Mods</a></h3>
+        <p>Terminology, safeguards, and how to choose your first device responsibly.</p>
+      </li>
+      <li>
+        <h3><a href="blog/nicotine-strength-explained/">Nicotine Strength Explained</a></h3>
+        <p>Understanding labels, absorption, and why strength selection matters. For adults only.</p>
+      </li>
+      <li>
+        <h3><a href="blog/troubleshooting-common-issues/">Troubleshooting Common Issues</a></h3>
+        <p>From dry hits to leaks|diagnose causes and apply safe fixes.</p>
+      </li>
+    </ol>
+  </section>
 
-<!-- ASD:TITLE: Homepage -->
-<!-- ASD:DESCRIPTION: Vapor Verse Blog, your ultimate source for vape disposable updates. --></main>
+  <section id="about" class="section">
+    <h2 id="about">About the blog <a class="h-anchor" href="#about">#</a></h2>
+    <p>Vapor Verse is an educational blog focused on responsible, adult-oriented coverage of vapor devices and e‑liquids. We prioritize safety, evidence-based insights, and practical, real‑world guidance. Content is for adults of legal age only.</p>
+    <p class="cta-inline"><a href="about.html">Learn more about us →</a></p>
+  </section>
+
+  <section id="subscribe" class="section">
+    <h2 id="subscribe">Subscribe <a class="h-anchor" href="#subscribe">#</a></h2>
+    <p>Get new posts in your inbox. No spam|just clear, useful insights.</p>
+    <form class="newsletter" action="newsletter.html" method="post">
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email" required placeholder="you@example.com" />
+      <button type="submit">Subscribe</button>
+    </form>
+    <p class="alt"><a href="rss.xml">Prefer RSS? Subscribe to the feed →</a></p>
+  </section>
+
+  <aside class="extras">
+    <section class="tags">
+      <h2 id="tags">Popular tags <a class="h-anchor" href="#tags">#</a></h2>
+      <p class="tag-cloud">
+        <a href="tags/battery/">#battery</a>
+        <a href="tags/safety/">#safety</a>
+        <a href="tags/flavor/">#flavor</a>
+        <a href="tags/pg-vg/">#pg-vg</a>
+        <a href="tags/coils/">#coils</a>
+        <a href="tags/maintenance/">#maintenance</a>
+      </p>
+    </section>
+
+    <section class="connect">
+      <h2 id="connect">Stay connected <a class="h-anchor" href="#connect">#</a></h2>
+      <ul>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="blog/">Archive</a></li>
+      </ul>
+    </section>
+  </aside>
+</main></main>
 
   <footer>
     <p>

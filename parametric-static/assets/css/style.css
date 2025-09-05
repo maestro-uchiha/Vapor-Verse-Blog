@@ -5,7 +5,7 @@
   --muted: #666666;
   --header: #222222;
   --footer: #222222;
-  --primary: #ffffff;     /* nav link color */
+  --primary: #ffcc00;     /* nav link color */
   --link: #0a66ff;        /* body link color */
   --border: #e5e5e5;
 
@@ -49,7 +49,7 @@ html[data-theme="light"] {
   --muted: #666666;
   --header: #222222;
   --footer: #222222;
-  --primary: #ffcc00;
+  --primary: #ffffff;
   --link: #0a66ff;
   --border: #e5e5e5;
   --chip: #f2f2f2;

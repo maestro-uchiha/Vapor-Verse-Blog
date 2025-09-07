@@ -2,18 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Vapor Verse Blog</title>
   <id>https://vapor-verse-blog.netlify.app/</id>
-  <updated>2025-09-07T15:18:40Z</updated>
+  <updated>2025-09-07T15:57:50Z</updated>
   <link rel="self" href="https://vapor-verse-blog.netlify.app/atom.xml"/>
-  <entry>
-    <title>Flavor, formulation, and what “smooth” really means | Vapor Verse Blog</title>
-    <link href="https://vapor-verse-blog.netlify.app/blog/flavor-formulation-and-what-smooth-really-means.html"/>
-    <id>https://vapor-verse-blog.netlify.app/blog/flavor-formulation-and-what-smooth-really-means.html</id>
-    <updated>2025-09-06T23:00:00Z</updated>
-  </entry>
   <entry>
     <title>Maintenance: coils, cleaning, and lifespan | Vapor Verse Blog</title>
     <link href="https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html"/>
     <id>https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html</id>
+    <updated>2025-09-06T23:00:00Z</updated>
+  </entry>
+  <entry>
+    <title>Flavor, formulation, and what “smooth” really means | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/flavor-formulation-and-what-smooth-really-means.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/flavor-formulation-and-what-smooth-really-means.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
@@ -23,9 +23,9 @@
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
-    <title>E‑liquid basics: nicotine strengths &amp;amp; PG/VG | Vapor Verse Blog</title>
-    <link href="https://vapor-verse-blog.netlify.app/blog/e-liquid-basics-nicotine-strengths-pg-vg.html"/>
-    <id>https://vapor-verse-blog.netlify.app/blog/e-liquid-basics-nicotine-strengths-pg-vg.html</id>
+    <title>Open-tank mods: airflow tuning and coil families</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/open-tank-mods-airflow-tuning-and-coil-families.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/open-tank-mods-airflow-tuning-and-coil-families.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
@@ -38,6 +38,12 @@
     <title>Compact pod systems: portability vs. performance | Vapor Verse Blog</title>
     <link href="https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html"/>
     <id>https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html</id>
+    <updated>2025-09-06T23:00:00Z</updated>
+  </entry>
+  <entry>
+    <title>E‑liquid basics: nicotine strengths &amp;amp; PG/VG | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/e-liquid-basics-nicotine-strengths-pg-vg.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/e-liquid-basics-nicotine-strengths-pg-vg.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>

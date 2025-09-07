@@ -2,8 +2,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Vapor Verse Blog</title>
   <id>https://vapor-verse-blog.netlify.app/</id>
-  <updated>2025-09-07T07:09:43Z</updated>
+  <updated>2025-09-07T08:10:42Z</updated>
   <link rel="self" href="https://vapor-verse-blog.netlify.app/atom.xml"/>
+  <entry>
+    <title>Maintenance: coils, cleaning, and lifespan | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html</id>
+    <updated>2025-09-06T23:00:00Z</updated>
+  </entry>
   <entry>
     <title>E‑liquid basics: nicotine strengths &amp;amp; PG/VG | Vapor Verse Blog</title>
     <link href="https://vapor-verse-blog.netlify.app/blog/e-liquid-basics-nicotine-strengths-pg-vg.html"/>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Vapor Verse Blog</title>
   <id>https://vapor-verse-blog.netlify.app/</id>
-  <updated>2025-09-07T18:00:24Z</updated>
+  <updated>2025-09-07T20:40:12Z</updated>
   <link rel="self" href="https://vapor-verse-blog.netlify.app/atom.xml"/>
   <entry>
     <title>Flavor, formulation, and what “smooth” really means | Vapor Verse Blog</title>
@@ -17,9 +17,9 @@
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
-    <title>Maintenance: coils, cleaning, and lifespan | Vapor Verse Blog</title>
-    <link href="https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html"/>
-    <id>https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html</id>
+    <title>E-liquids: dessert, fruit, and classic profiles | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/e-liquids-dessert-fruit-and-classic-profiles.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/e-liquids-dessert-fruit-and-classic-profiles.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
@@ -35,15 +35,15 @@
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
-    <title>E-liquids: dessert, fruit, and classic profiles | Vapor Verse Blog</title>
-    <link href="https://vapor-verse-blog.netlify.app/blog/e-liquids-dessert-fruit-and-classic-profiles.html"/>
-    <id>https://vapor-verse-blog.netlify.app/blog/e-liquids-dessert-fruit-and-classic-profiles.html</id>
+    <title>Maintenance: coils, cleaning, and lifespan | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
-    <title>Compact pod systems: portability vs. performance | Vapor Verse Blog</title>
-    <link href="https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html"/>
-    <id>https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html</id>
+    <title>Cleaning tanks without flavor ghosting</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/cleaning-tanks-without-flavor-ghosting.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/cleaning-tanks-without-flavor-ghosting.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
@@ -53,13 +53,19 @@
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
+    <title>Compact pod systems: portability vs. performance | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html</id>
+    <updated>2025-09-06T23:00:00Z</updated>
+  </entry>
+  <entry>
     <title>E‑liquid basics: nicotine strengths &amp;amp; PG/VG | Vapor Verse Blog</title>
     <link href="https://vapor-verse-blog.netlify.app/blog/e-liquid-basics-nicotine-strengths-pg-vg.html"/>
     <id>https://vapor-verse-blog.netlify.app/blog/e-liquid-basics-nicotine-strengths-pg-vg.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
-    <title>Dialing in airflow for your style</title>
+    <title>Dialing in airflow for your style | Vapor Verse Blog</title>
     <link href="https://vapor-verse-blog.netlify.app/blog/dialing-in-airflow-for-your-style.html"/>
     <id>https://vapor-verse-blog.netlify.app/blog/dialing-in-airflow-for-your-style.html</id>
     <updated>2025-09-06T23:00:00Z</updated>

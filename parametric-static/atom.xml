@@ -2,18 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Vapor Verse Blog</title>
   <id>https://vapor-verse-blog.netlify.app/</id>
-  <updated>2025-09-07T16:13:34Z</updated>
+  <updated>2025-09-07T17:19:07Z</updated>
   <link rel="self" href="https://vapor-verse-blog.netlify.app/atom.xml"/>
-  <entry>
-    <title>Maintenance: coils, cleaning, and lifespan | Vapor Verse Blog</title>
-    <link href="https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html"/>
-    <id>https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html</id>
-    <updated>2025-09-06T23:00:00Z</updated>
-  </entry>
   <entry>
     <title>Flavor, formulation, and what “smooth” really means | Vapor Verse Blog</title>
     <link href="https://vapor-verse-blog.netlify.app/blog/flavor-formulation-and-what-smooth-really-means.html"/>
     <id>https://vapor-verse-blog.netlify.app/blog/flavor-formulation-and-what-smooth-really-means.html</id>
+    <updated>2025-09-06T23:00:00Z</updated>
+  </entry>
+  <entry>
+    <title>Eliminating dry hits: wicking &amp;amp; priming</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/eliminating-dry-hits-wicking-priming.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/eliminating-dry-hits-wicking-priming.html</id>
+    <updated>2025-09-06T23:00:00Z</updated>
+  </entry>
+  <entry>
+    <title>Maintenance: coils, cleaning, and lifespan | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/maintenance-coils-cleaning-and-lifespan.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
@@ -29,9 +35,9 @@
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
-    <title>E-liquids: dessert, fruit, and classic profiles</title>
-    <link href="https://vapor-verse-blog.netlify.app/blog/e-liquids-dessert-fruit-and-classic-profiles.html"/>
-    <id>https://vapor-verse-blog.netlify.app/blog/e-liquids-dessert-fruit-and-classic-profiles.html</id>
+    <title>Compact pod systems: portability vs. performance | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
@@ -41,9 +47,9 @@
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
-    <title>Compact pod systems: portability vs. performance | Vapor Verse Blog</title>
-    <link href="https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html"/>
-    <id>https://vapor-verse-blog.netlify.app/blog/compact-pod-systems-portability-vs-performance.html</id>
+    <title>E-liquids: dessert, fruit, and classic profiles | Vapor Verse Blog</title>
+    <link href="https://vapor-verse-blog.netlify.app/blog/e-liquids-dessert-fruit-and-classic-profiles.html"/>
+    <id>https://vapor-verse-blog.netlify.app/blog/e-liquids-dessert-fruit-and-classic-profiles.html</id>
     <updated>2025-09-06T23:00:00Z</updated>
   </entry>
   <entry>
